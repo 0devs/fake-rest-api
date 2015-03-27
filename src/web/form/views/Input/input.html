@@ -1,0 +1,10 @@
+<label>{{title}}</label> <br>
+
+<span style="color: red;" v-if="required">*</span>
+
+<input type="text" v-model="value"> <span v-text="value"></span>
+
+<ul>
+    <li style="color: red;" v-repeat="error: errors">{{error}}</li>
+</ul>
+
