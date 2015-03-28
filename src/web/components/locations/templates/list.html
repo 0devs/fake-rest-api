@@ -13,7 +13,7 @@
         <table class="table table-bordered">
             <tr>
                 <th class="col-md-5">location</th>
-                <th class="col-md-6">usage</th>
+                <th class="col-md-6">usage <a href="#" v-if="type == 'curl'" v-on="click: setHttp()">http</a> <a href="#" v-if="type == 'http'"  v-on="click: setCurl()">curl</a></th>
                 <th class="col-md-3">actions</th>
             </tr>
 
@@ -32,7 +32,10 @@
 
                 </td>
                 <td>
-
+                    <div class="btn-group btn-group-sm">
+                        <button disabled class="btn btn-success"> <span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
+                    <button disabled class="btn btn-danger"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                    </div>
                 </td>
             </tr>
         </table>

@@ -23,7 +23,7 @@ function List(config, logger) {
                 locations: [],
                 formVisible: false,
                 base: config.fake.base,
-                type: 'http',
+                type: 'curl',
                 request: '',
                 response: ''
             }
@@ -47,7 +47,7 @@ function List(config, logger) {
                 this.$set('formVisible', true);
             },
 
-            hideAddForm: function() {
+            hideAddForm: function () {
                 this.$set('formVisible', false);
             },
 
@@ -68,11 +68,11 @@ function List(config, logger) {
                 });
             },
 
-            addLocation: function(data) {
+            addLocation: function (data) {
                 this.locations.push(data);
             },
 
-            doResponse: function(location) {
+            doResponse: function (location) {
 
                 var method = location.method.toLowerCase();
 
@@ -85,7 +85,7 @@ function List(config, logger) {
                 var that = this;
 
                 request[method](url)
-                    .end(function(err, res) {
+                    .end(function (err, res) {
                         if (err) {
                             console.log(err);
                             return;
@@ -102,8 +102,14 @@ function List(config, logger) {
 
                         $('#response').modal('show');
                     });
+            },
 
+            setHttp: function () {
+                this.$set('type', 'http');
+            },
 
+            setCurl: function () {
+                this.$set('type', 'curl');
             }
 
         }

@@ -14,7 +14,7 @@ function LocationForm(values) {
 
     var schema = {
         url: {
-            title: 'Url',
+            title: 'Url (example: /check)',
             type: 'String',
             view: 'Input',
             validate: [],
