@@ -26,7 +26,7 @@ FieldString.prototype.validate = function () {
             return;
         }
 
-        if (that.validateRules && !_.isEmpty(that.value)) {
+        if (that.validateRules && !_.isEmpty(that.validateRules) && !_.isEmpty(that.value)) {
 
             var valid = false;
 

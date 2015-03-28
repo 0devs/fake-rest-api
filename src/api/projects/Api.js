@@ -6,6 +6,7 @@ var ApiError = require('./Error');
 
 var moment = require('moment');
 var joi = require('joi');
+//var convert = require('joi-to-json-schema');
 
 var schema = require('./schema');
 
@@ -74,7 +75,7 @@ ProjectsApi.prototype.find = function(id, callback) {
 ProjectsApi.prototype.create = function(data, callback) {
     var that = this;
 
-    data.creation_date = moment().unix();
+    data.creation_date = moment().toISOString();
 
     this.validate(data, function(err, project) {
 
@@ -100,3 +101,7 @@ ProjectsApi.prototype.create = function(data, callback) {
         callback(null, project);
     });
 };
+
+//ProjectsApi.prototype.schema = function(data, callback) {
+//    callback(null, convert(schema));
+//};

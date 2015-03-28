@@ -1,0 +1,18 @@
+<div class="row">
+    <div class="col-md-12">
+        <div v-component="url" v-with="fields.url"></div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-1">
+        <button class="btn btn-success" v-on="click: save($event, this)">save</button>
+    </div>
+    <div class="col-md-1">
+        <button class="btn btn-danger" v-on="click: cancel($event, this)">cancel</button>
+    </div>
+</div>
+
+
+
+

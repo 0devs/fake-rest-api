@@ -2,14 +2,37 @@
 <head>
     <script src="/static/vendors/jquery/jquery-2.1.3.min.js"></script>
 
-    <link rel="stylesheet" href="/static/vendors/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/static/vendors/bootstrap/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/static/vendors/bootstrap/css/paper-bootstrap.min.css">
+    <!--<link rel="stylesheet" href="/static/vendors/bootstrap/css/bootstrap-theme.min.css">-->
     <script src="/static/vendors/bootstrap/js/bootstrap.min.js"></script>
 
     <script src="/static/app/init.js" type="application/javascript"></script>
     <script src="/static/app/app.bundle.min.js" type="application/javascript"></script>
+
+    <style>
+        .row {
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
+<div class="container" >
+    <nav class="navbar navbar-inverse" style="margin-top: 10px;">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                        aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">fake-rest-api</a>
+            </div>
+        </div>
+    </nav>
 
+    <div class="_body"></div>
+</div>
 </body>
 </html>

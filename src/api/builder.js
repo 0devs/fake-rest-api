@@ -3,7 +3,14 @@ var send = function (res, data, status) {
         status = 200;
     }
 
-    res.writeHead(status, {'Content-Type': 'application/json'});
+    var headers = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin' : '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE',
+        'Access-Control-Allow-Headers': 'Content-Type, Cache-Control'
+    };
+
+    res.writeHead(status, headers);
 
     res.write(JSON.stringify(data));
 
@@ -75,4 +82,14 @@ module.exports = function (location, app, logger, api, Bundle) {
             api.create(req.params.id, createCallback(Bundle, res));
         });
     }
+
+    if (api.schema) {
+        app.options(location + '/schema', function(req, res) {
+            api.schema(req.body, createCallback(Bundle, res));
+        });
+    }
+
+    app.options(location, function(req, res) {
+        send(res, {'ok': true}, 200);
+    });
 };

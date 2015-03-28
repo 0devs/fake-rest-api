@@ -1,0 +1,31 @@
+<h2>projects</h2>
+
+<div class="row">
+    <div class="col-md-5">
+        <button class="btn btn-success" v-if="!formVisible" v-on="click: showAddForm($event, this)">add project</button>
+    </div>
+</div>
+
+<div v-component="form" v-show="formVisible"></div>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-bordered">
+            <tr>
+                <th class="col-md-6">project url</th>
+                <th class="col-md-3">created</th>
+                <th class="col-md-3">actions</th>
+            </tr>
+
+            <tr v-repeat="projects">
+                <td>
+                    <a href="#">{{url}}</a>
+                </td>
+                <td><small>{{creation_date}}</small></td>
+                <td>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

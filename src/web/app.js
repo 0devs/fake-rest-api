@@ -1,40 +1,24 @@
 var Vue = require('vue');
 
+//Vue.config.debug = true
+
 var Form = require('./form');
 
 var _ = require('lodash');
 
 Promise = require('bluebird');
 
+var Projects = require('./components/projects');
+
+var config = require('./config');
+
+var logger = require('loglevel');
+logger.enableAll();
+
 $(document).ready(function () {
 
-    var schema = {
-        title: {
-            title: 'Title',
-            type: 'String',
-            view: 'Input',
-            validate: [],
-            required: true
-        }
-    };
+    var p = new Projects.List(config.api.projects, logger);
+    p.$mount('._body');
 
-    var values = {
-        title: ''
-    };
 
-    var formFactory = new Form.Factory(schema, values);
-
-    var form = new Form.Form('body', require('./templates/form.html'));
-
-    var fields = formFactory.getFields();
-
-    form.setFields(fields);
-    form.setComponents(formFactory.getComponents());
-
-    form.setFormData({
-        valid: false,
-        result: null
-    });
-
-    new Vue(form);
 });

@@ -48,69 +48,108 @@ FormFactory.prototype.getComponents = function () {
 
 function Form(el, template) {
     this.el = el;
-    this.template = template;;
+    this.template = template;
+    this.fields = {};
+    this.form = {};
 }
 
 Form.prototype.template = null;
 
-Form.prototype.data = {
-    fields: {},
-    form: {}
+//Form.prototype.data = {
+//    fields: this.fields,
+//    form: this.form
+//};
+
+Form.prototype.data = function () {
+    return {
+        fields: {},
+        form: {}
+    }
 };
 
 Form.prototype.components = {};
 
 Form.prototype.setFields = function (fields) {
-    this.data.fields = fields;
+    this.fields = fields;
 };
 
 Form.prototype.setFormData = function (data) {
-    this.data.form = data;
+    this.form = data;
+};
+
+Form.prototype.created = function () {
+    this.$set('fields', this.$options.fields);
+    this.$set('form', this.$options.form);
 };
 
 Form.prototype.setComponents = function (components) {
     this.components = components;
 };
 
-Form.prototype.methods = {
+Form.prototype.methods = {};
 
-    getValue: function () {
-        var result = {};
 
-        _.each(this.$data.fields, function (field, name) {
-            if (field instanceof Fields.Abstract && field.isEnabled()) {
-                result[name] = field.getValue();
-            }
-        });
+Form.prototype.methods.getValue = function () {
+    var result = {};
 
-        return result;
-    },
+    _.each(this.$data.fields, function (field, name) {
+        if (field instanceof Fields.Abstract && field.isEnabled()) {
+            result[name] = field.getValue();
+        }
+    });
 
-    validate: function (callback) {
+    return result;
+};
 
-        // проверяем поля
-        var promises = {};
+Form.prototype.methods.validate = function (callback) {
 
-        _.each(this.$data.fields, function (field, name) {
-            if (field instanceof Fields.Abstract && field.isEnabled()) {
-                promises[name] = field.validate();
-            }
-        });
+    var that = this;
 
-        Promise.props(promises)
-            .then(function (data) {
-                var valid = true;
+    // проверяем поля
+    var promises = {};
 
-                _.each(data, function (val) {
-                    valid = valid && val;
-                });
+    _.each(this.$data.fields, function (field, name) {
+        if (field instanceof Fields.Abstract && field.isEnabled()) {
+            promises[name] = field.validate();
+        }
+    });
 
-                callback(null, valid);
-            }).catch(function (error) {
-                callback(error);
+    Promise.props(promises)
+        .then(function (data) {
+            var valid = true;
+
+            _.each(data, function (val) {
+                valid = valid && val;
             });
+
+            //callback(null, valid);
+            callback.call(that, null, valid);
+        }).catch(function (error) {
+            //callback(error);
+            callback.call(that, error);
+        });
+};
+
+Form.prototype.methods.clear = function() {
+    _.each(this.$data.fields, function (field, name) {
+        if (field instanceof Fields.Abstract ) {
+            field.value = '';
+        }
+    });
+};
+
+
+Form.prototype.addMethod = function(name, func) {
+    this.methods[name] = func;
+};
+
+Form.prototype.addMethods = function(methods) {
+    for (var name in methods) {
+        this.addMethod(name, methods[name]);
     }
 };
+
+
 
 Form.prototype.extend = function (obj) {
     _.merge(this, obj);
