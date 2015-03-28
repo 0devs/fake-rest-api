@@ -6,7 +6,6 @@ var _ = require('lodash');
 
 Promise = require('bluebird');
 
-
 $(document).ready(function () {
 
     var schema = {
