@@ -90,6 +90,6 @@ module.exports = function (location, app, logger, api, Bundle) {
     }
 
     app.options(location, function(req, res) {
-        send(res, {'ok': true}, 200);
+        send(res, {'ok': true});
     });
 };

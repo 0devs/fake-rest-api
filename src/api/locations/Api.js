@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = ProjectsApi;
+module.exports = LocationsApi;
 
 var ApiError = require('./Error');
 
@@ -11,7 +11,7 @@ var convert = require('joi-to-json-schema');
 var schema = require('./schema');
 
 
-function ProjectsApi(config, logger) {
+function LocationsApi(config, logger) {
     this._config = config;
     this._logger = logger;
 
@@ -23,17 +23,19 @@ function ProjectsApi(config, logger) {
         id: {},
 
         // unique name
-        name: []
+        url: [],
+
+        method_url_location: {}
     }
 }
 
 
-ProjectsApi.prototype._generateId = function() {
+LocationsApi.prototype._generateId = function() {
     this._id = this._id + 1;
     return this._id.toString();
 };
 
-ProjectsApi.prototype.validate = function(project, callback) {
+LocationsApi.prototype.validate = function(project, callback) {
 
     joi.validate(project, schema, {
         abortEarly: false,
@@ -57,7 +59,18 @@ ProjectsApi.prototype.validate = function(project, callback) {
     });
 };
 
-ProjectsApi.prototype.get = function(id, callback) {
+LocationsApi.prototype.findByMethodAndPath = function(method, path, callback) {
+    var key = method + '_' + path;
+
+    if (!this._index.method_url_location[key]) {
+        callback(new ApiError('not_found'));
+        return;
+    }
+
+    callback(null, this._index.method_url_location[key]);
+};
+
+LocationsApi.prototype.get = function(id, callback) {
     if (!this._index.id[id]) {
         callback(new ApiError('not_found'));
         return;
@@ -67,40 +80,43 @@ ProjectsApi.prototype.get = function(id, callback) {
 };
 
 
-ProjectsApi.prototype.find = function(id, callback) {
+LocationsApi.prototype.find = function(id, callback) {
     callback(null, this._locations);
 };
 
 
-ProjectsApi.prototype.create = function(data, callback) {
+LocationsApi.prototype.create = function(data, callback) {
     var that = this;
 
     data.creation_date = moment().toISOString();
 
-    this.validate(data, function(err, project) {
+    this.validate(data, function(err, location) {
 
         if (err) {
             callback(err);
             return;
         }
 
-        if (that._index.name.indexOf(project.url) > -1) {
+        var indexKey = location.method + '_' + location.url;
+
+        if (that._index.url.indexOf(indexKey) > -1) {
             var e = new ApiError('duplicate_url', [{message: 'url already exists'}]);
             callback(e);
             return;
         }
 
-        project.id = that._generateId();
+        location.id = that._generateId();
 
-        that._locations.push(project);
+        that._locations.push(location);
 
-        that._index.id[project.id] = project;
-        that._index.name.push(project.url);
+        that._index.id[location.id] = location;
+        that._index.url.push(indexKey);
+        that._index.method_url_location[indexKey] = location;
 
-        callback(null, project);
+        callback(null, location);
     });
 };
 
-ProjectsApi.prototype.schema = function(data, callback) {
+LocationsApi.prototype.schema = function(data, callback) {
     callback(null, convert(schema));
 };

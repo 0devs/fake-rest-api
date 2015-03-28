@@ -2,10 +2,10 @@ var Form = require('../../form');
 
 var Vue = require('vue');
 
-module.exports = ProjectForm;
+module.exports = LocationForm;
 
 
-function ProjectForm(values) {
+function LocationForm(values) {
     if (!values) {
         values = {
             url: ''
@@ -19,6 +19,42 @@ function ProjectForm(values) {
             view: 'Input',
             validate: [],
             required: true
+        },
+        method: {
+            title: 'Method',
+            type: 'String',
+            view: 'Select',
+            options: [
+                {
+                    text: 'GET',
+                    value: 'GET'
+                },
+                {
+                    text: 'POST',
+                    value: 'POST'
+                },
+                {
+                    text: 'PUT',
+                    value: 'PUT'
+                },
+                {
+                    text: 'PATCH',
+                    value: 'PATCH'
+                },
+                {
+                    text: 'DELETE',
+                    value: 'DELETE'
+                }
+            ],
+            default: 'GET',
+            required: true
+        },
+        response: {
+            title: 'Response',
+            type: 'String',
+            view: 'Textarea',
+            required: true,
+            validate: [{json: true}]
         }
     };
 
@@ -45,6 +81,8 @@ function ProjectForm(values) {
 
                 if (valid) {
                     var that = this;
+
+
 
                     this.$parent.getLocationsApi().create(this.getValue(), function(err, data) {
 

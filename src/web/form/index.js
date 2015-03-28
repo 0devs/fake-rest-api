@@ -63,7 +63,8 @@ Form.prototype.template = null;
 Form.prototype.data = function () {
     return {
         fields: {},
-        form: {}
+        form: {},
+        errors: []
     }
 };
 
@@ -80,6 +81,7 @@ Form.prototype.setFormData = function (data) {
 Form.prototype.created = function () {
     this.$set('fields', this.$options.fields);
     this.$set('form', this.$options.form);
+    this.$set('errors', []);
 };
 
 Form.prototype.setComponents = function (components) {
@@ -136,6 +138,10 @@ Form.prototype.methods.clear = function() {
             field.value = '';
         }
     });
+};
+
+Form.prototype.methods.clearErrors = function() {
+    this.$set('errors', []);
 };
 
 

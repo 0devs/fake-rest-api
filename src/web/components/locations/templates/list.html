@@ -1,0 +1,65 @@
+<h2>locations</h2>
+
+<div class="row">
+    <div class="col-md-5">
+        <button class="btn btn-success" v-if="!formVisible" v-on="click: showAddForm($event, this)">add location</button>
+    </div>
+</div>
+
+<div v-component="form" v-if="formVisible == true"></div>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-bordered">
+            <tr>
+                <th class="col-md-5">location</th>
+                <th class="col-md-6">usage</th>
+                <th class="col-md-3">actions</th>
+            </tr>
+
+            <tr v-repeat="locations">
+                <td>
+                    <a href="#" v-on="click: doResponse(this)"><strong>{{method}} {{url}}</strong></a>
+                </td>
+                <td style="font-size: 14px;">
+                    <div v-if="type == 'curl'">
+                        curl -X {{method}} {{base}}{{url}}
+                    </div>
+
+                    <div v-if="type == 'http'">
+                        http {{method}} {{base}}{{url}}
+                    </div>
+
+                </td>
+                <td>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- Button trigger modal -->
+<!--<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#response">-->
+    <!--Launch demo modal-->
+<!--</button>-->
+
+<div class="modal modal-wide" id="response" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4> </h4>
+            </div>
+            <div class="modal-body">
+
+                <!--<pre style="padding: 0"><code class="http">GET /fake/topics HTTP/1.1</code></pre>-->
+
+                <!--<hr size="1px">-->
+
+                <pre style="padding: 0"><code class="highlight json"></code></pre>
+            </div>
+
+        </div>
+    </div>
+</div>

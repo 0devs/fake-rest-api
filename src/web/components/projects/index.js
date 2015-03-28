@@ -28,31 +28,31 @@ function List(config, logger) {
         },
 
         created: function () {
-            this._projectsApi = new Project.Service(config);
+            this._locationsApi = new Project.Service(config);
         },
 
         ready: function () {
             var that = this;
-            this.refreshProjects();
+            this.refreshLocations();
         },
 
         methods: {
             showAddForm: function () {
-                this.formVisible = true;
+                this.$set('formVisible', true);
             },
 
             hideAddForm: function() {
-                this.formVisible = false;
+                this.$set('formVisible', false);
             },
 
-            getProjectsApi: function () {
-                return this._projectsApi;
+            getLocationsApi: function () {
+                return this._locationsApi;
             },
 
-            refreshProjects: function () {
+            refreshLocations: function () {
                 var that = this;
 
-                this._projectsApi.find({}, function (err, data) {
+                this._locationsApi.find({}, function (err, data) {
                     if (err) {
                         logger.error(err);
                         return;
@@ -62,7 +62,7 @@ function List(config, logger) {
                 });
             },
 
-            addProject: function(data) {
+            addLocation: function(data) {
                 this.projects.push(data);
             }
 

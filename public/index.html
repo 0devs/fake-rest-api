@@ -2,9 +2,13 @@
 <head>
     <script src="/static/vendors/jquery/jquery-2.1.3.min.js"></script>
 
-    <link rel="stylesheet" href="/static/vendors/bootstrap/css/paper-bootstrap.min.css">
+    <link rel="stylesheet" href="/static/vendors/bootstrap/css/flatly-bootstrap.min.css">
     <!--<link rel="stylesheet" href="/static/vendors/bootstrap/css/bootstrap-theme.min.css">-->
     <script src="/static/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
 
     <script src="/static/app/init.js" type="application/javascript"></script>
     <script src="/static/app/app.bundle.min.js" type="application/javascript"></script>
@@ -12,6 +16,13 @@
     <style>
         .row {
             margin-bottom: 10px;
+        }
+
+        .modal.modal-wide .modal-dialog {
+            width: 90%;
+        }
+        .modal-wide .modal-body {
+            overflow-y: auto;
         }
     </style>
 </head>

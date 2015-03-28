@@ -28,10 +28,19 @@ FieldString.prototype.validate = function () {
 
         if (that.validateRules && !_.isEmpty(that.validateRules) && !_.isEmpty(that.value)) {
 
-            var valid = false;
+            var valid = true;
 
             _.each(that.validateRules, function (rule) {
-                //
+                if (rule.json) {
+                    var isJSON = that.isJSON(that.value);
+
+                    if (!isJSON) {
+                        that.errors.push('must be valid JSON');
+                    }
+
+
+                    valid =  isJSON && valid;
+                }
             });
 
             resolve(valid);
@@ -39,5 +48,14 @@ FieldString.prototype.validate = function () {
 
         resolve(true);
     });
+};
+
+FieldString.prototype.isJSON = function (value) {
+    try {
+        JSON.parse(value);
+        return true;
+    } catch (e) {
+        return false;
+    }
 };
 

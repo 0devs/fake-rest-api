@@ -1,9 +1,8 @@
-<label>{{title}}</label> <br>
-
-<span style="color: red;" v-if="required">*</span>
-
-<textarea v-model="value"></textarea> <span v-text="value"></span>
+<label>{{title}}</label> <span style="color: red;" v-if="required">*</span>
 
 <ul>
     <li style="color: red;" v-repeat="error: errors">{{error}}</li>
 </ul>
+
+<textarea class="form-control" v-model="value" rows="10"></textarea>
+

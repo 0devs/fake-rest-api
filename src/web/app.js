@@ -9,6 +9,7 @@ var _ = require('lodash');
 Promise = require('bluebird');
 
 var Projects = require('./components/projects');
+var Locations = require('./components/locations');
 
 var config = require('./config');
 
@@ -17,7 +18,7 @@ logger.enableAll();
 
 $(document).ready(function () {
 
-    var p = new Projects.List(config.api.projects, logger);
+    var p = new Locations.List(config, logger);
     p.$mount('._body');
 
 

@@ -1,1 +1,8 @@
-<select v-model="value" v-options="attrs.options"></select>
+<label>{{title}} <span style="color: red;" v-if="required">*</span></label>
+
+<ul>
+    <li style="color: red;" v-repeat="error: errors">{{error}}</li>
+</ul>
+
+<select v-model="value" class="form-control" options="attrs.options"></select> <span v-text="value"></span>
+
