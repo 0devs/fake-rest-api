@@ -46,6 +46,7 @@ function List(config, logger) {
             showAddForm: function () {
                 this.$set('formVisible', true);
                 this.$.form.changeType('create');
+                this.$.form.enable();
             },
 
             hideAddForm: function () {

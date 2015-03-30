@@ -155,8 +155,6 @@ Form.prototype.addMethods = function(methods) {
     }
 };
 
-
-
 Form.prototype.extend = function (obj) {
     _.merge(this, obj);
 };

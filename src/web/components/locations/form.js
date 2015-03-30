@@ -2,6 +2,8 @@ var Form = require('../../form');
 
 var Vue = require('vue');
 
+var _ = require('lodash');
+
 module.exports = LocationForm;
 
 
@@ -52,7 +54,7 @@ function LocationForm(values) {
         response: {
             title: 'Response',
             type: 'String',
-            view: 'Textarea',
+            view: 'AceTextarea',
             required: true,
             validate: [{json: true}]
         }
@@ -71,22 +73,26 @@ function LocationForm(values) {
         type: 'create',
         id: null,
         valid: false,
-        result: null
+        result: null,
+        editor: null
     });
 
     form.addMethods({
         disable: function() {
             $(this.$el).find('input').attr('disabled', true);
             $(this.$el).find('select').attr('disabled', true);
+            this.form.editor.getSession().setValue(this.fields.response.value);
         },
 
         enable: function() {
             $(this.$el).find('input').attr('disabled', false);
             $(this.$el).find('select').attr('disabled', false);
+            this.form.editor.getSession().setValue(' ');
         },
 
         changeType: function(type, id) {
             this.$set('type', type);
+
 
             if (type == 'create') {
                 this.$set('id', null);
@@ -124,6 +130,7 @@ function LocationForm(values) {
 
                         that.$parent.addLocation(data.result);
                         that.clear();
+                        that.form.editor.getSession().setValue('');
                         that.$parent.hideAddForm();
                     });
                 }
@@ -175,10 +182,28 @@ function LocationForm(values) {
             this.clear();
             this.clearErrors();
 
+            this.form.editor.getSession().setValue('');
             this.$parent.hideAddForm();
         }
 
     });
+
+    form.ready = function() {
+        var that = this;
+        var textarea = $(this.$el).find('._response > textarea');
+
+        var editor = ace.edit($(this.$el).find('._response > .editor')[0]);
+
+        this.form.editor = editor;
+
+        editor.getSession().setMode("ace/mode/javascript");
+
+        editor.getSession().setValue(this.fields.response.value);
+
+        editor.getSession().on('change', function(){
+            that.$set('fields.response.value', editor.getSession().getValue());
+        });
+    };
 
     return form;
 }

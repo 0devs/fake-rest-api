@@ -109,6 +109,15 @@ LocationsApi.prototype.create = function (data, callback) {
             return;
         }
 
+        try {
+            var obj = JSON.parse(location.response);
+            location.response = JSON.stringify(obj, null, '    ');
+
+        } catch (e) {
+            callback(new ApiError('invalid_data', [{message: 'response must be valid JSON'}]));
+            return;
+        }
+
         location.id = that._generateId();
 
         that._locations.push(location);
@@ -143,7 +152,9 @@ LocationsApi.prototype.update = function (updateData, callback) {
 
             if (name == 'response') {
                 try {
-                    JSON.parse(updateData[name]);
+                    var obj = JSON.parse(updateData[name]);
+                    updateData[name] = JSON.stringify(obj, null, '    ');
+
                 } catch (e) {
                     callback(new ApiError('invalid_data', [{message: 'response must be valid JSON'}]));
                     return;
