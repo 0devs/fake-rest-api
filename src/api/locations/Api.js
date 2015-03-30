@@ -8,6 +8,8 @@ var moment = require('moment');
 var joi = require('joi');
 var convert = require('joi-to-json-schema');
 
+var _ = require('lodash');
+
 var schema = require('./schema');
 
 
@@ -30,18 +32,18 @@ function LocationsApi(config, logger) {
 }
 
 
-LocationsApi.prototype._generateId = function() {
+LocationsApi.prototype._generateId = function () {
     this._id = this._id + 1;
     return this._id.toString();
 };
 
-LocationsApi.prototype.validate = function(project, callback) {
+LocationsApi.prototype.validate = function (project, callback) {
 
     joi.validate(project, schema, {
         abortEarly: false,
-        convert:true
+        convert: true
         //stripUnknown: true
-    }, function(err, result) {
+    }, function (err, result) {
 
         if (err) {
 
@@ -59,7 +61,7 @@ LocationsApi.prototype.validate = function(project, callback) {
     });
 };
 
-LocationsApi.prototype.findByMethodAndPath = function(method, path, callback) {
+LocationsApi.prototype.findByMethodAndPath = function (method, path, callback) {
     var key = method + '_' + path;
 
     if (!this._index.method_url_location[key]) {
@@ -70,7 +72,7 @@ LocationsApi.prototype.findByMethodAndPath = function(method, path, callback) {
     callback(null, this._index.method_url_location[key]);
 };
 
-LocationsApi.prototype.get = function(id, callback) {
+LocationsApi.prototype.get = function (id, callback) {
     if (!this._index.id[id]) {
         callback(new ApiError('not_found'));
         return;
@@ -80,19 +82,19 @@ LocationsApi.prototype.get = function(id, callback) {
 };
 
 
-LocationsApi.prototype.find = function(id, callback) {
+LocationsApi.prototype.find = function (id, callback) {
     callback(null, this._locations);
 };
 
 
-LocationsApi.prototype.create = function(data, callback) {
+LocationsApi.prototype.create = function (data, callback) {
     var that = this;
 
     data.creation_date = moment().toISOString();
 
     delete data.modification_date;
 
-    this.validate(data, function(err, location) {
+    this.validate(data, function (err, location) {
 
         if (err) {
             callback(err);
@@ -119,6 +121,44 @@ LocationsApi.prototype.create = function(data, callback) {
     });
 };
 
-LocationsApi.prototype.schema = function(data, callback) {
+LocationsApi.prototype.update = function (updateData, callback) {
+    delete updateData.modification_date;
+
+    var that = this;
+
+    if (!updateData.id) {
+        callback(new ApiError('invalid_data', [{message: 'no id'}]));
+        return;
+    }
+
+    if (!that._index.id[updateData.id]) {
+        callback(new ApiError('not_found', [{message: 'such location not found'}]));
+        return;
+    }
+
+    var data = that._index.id[updateData.id];
+
+    ['response'].forEach(function (name) {
+        if (updateData[name]) {
+
+            if (name == 'response') {
+                try {
+                    JSON.parse(updateData[name]);
+                } catch (e) {
+                    callback(new ApiError('invalid_data', [{message: 'response must be valid JSON'}]));
+                    return;
+                }
+            }
+
+            data[name] = updateData[name];
+        }
+    });
+
+    data['modification_date'] = moment().toISOString();
+
+    callback(null, data);
+};
+
+LocationsApi.prototype.schema = function (data, callback) {
     callback(null, convert(schema));
 };

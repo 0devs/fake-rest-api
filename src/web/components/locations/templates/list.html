@@ -6,7 +6,7 @@
     </div>
 </div>
 
-<div v-component="form" v-if="formVisible == true"></div>
+<div v-component="form" v-show="formVisible == true" v-ref="form"></div>
 
 <div class="row">
     <div class="col-md-12">
@@ -19,7 +19,7 @@
 
             <tr v-repeat="locations">
                 <td>
-                    <a href="#" v-on="click: doResponse(this)"><strong>{{method}} {{url}}</strong></a>
+                    <a href="#{{id}}" v-on="click: doResponse(this)"><strong>{{method}} {{url}}</strong></a>
                 </td>
                 <td style="font-size: 14px;">
                     <div v-if="type == 'curl'">
@@ -33,8 +33,8 @@
                 </td>
                 <td>
                     <div class="btn-group btn-group-sm">
-                        <button disabled class="btn btn-success"> <span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
-                    <button disabled class="btn btn-danger"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                        <button  class="btn btn-success" v-on="click: showEditForm(this)"> <span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
+                        <button disabled class="btn btn-danger"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
                     </div>
                 </td>
             </tr>

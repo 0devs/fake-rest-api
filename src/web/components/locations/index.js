@@ -45,10 +45,13 @@ function List(config, logger) {
         methods: {
             showAddForm: function () {
                 this.$set('formVisible', true);
+                this.$.form.changeType('create');
             },
 
             hideAddForm: function () {
                 this.$set('formVisible', false);
+                this.$.form.changeType('create');
+                this.refreshLocations();
             },
 
             getLocationsApi: function () {
@@ -70,6 +73,15 @@ function List(config, logger) {
 
             addLocation: function (data) {
                 this.locations.push(data);
+            },
+
+            showEditForm: function(vm) {
+                vm.$parent.$set('formVisible', true);
+                vm.$parent.$.form.changeType('update', vm.id);
+                vm.$parent.$.form.$set('fields.url.value', vm.url);
+                vm.$parent.$.form.$set('fields.method.value', vm.method);
+                vm.$parent.$.form.$set('fields.response.value', vm.response);
+                vm.$parent.$.form.disable();
             },
 
             doResponse: function (location) {

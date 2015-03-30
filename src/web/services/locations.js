@@ -39,3 +39,17 @@ LocationService.prototype.create = function(data, callback) {
             callback(null, res.body);
         });
 };
+
+LocationService.prototype.update = function(data, callback) {
+
+    request.post(this._config.base + '/' + data.id)
+        .send(data)
+        .end(function(err, res) {
+            if (err) {
+                callback(err);
+                return;
+            }
+
+            callback(null, res.body);
+        });
+};

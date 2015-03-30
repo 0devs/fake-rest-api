@@ -92,4 +92,8 @@ module.exports = function (location, app, logger, api, Bundle) {
     app.options(location, function(req, res) {
         send(res, {'ok': true});
     });
+
+    app.options(location + '/:id', function(req, res) {
+        send(res, {'ok': true});
+    });
 };
