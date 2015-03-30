@@ -19,13 +19,46 @@ var Locations = require('./locations');
 app.use(cookieParser());
 app.use(bodyParser.json({limit: '1024kb'}));
 
-var config = {};
+var config = require('./config');
+
 
 var ProjectsApi = new Projects.Api(config, logger);
 builder('/api/projects', app, logger, ProjectsApi, Projects);
 
 var LocationsApi = new Locations.Api(config, logger);
 builder('/api/locations', app, logger, LocationsApi, Locations);
+
+var backup = require('./backup');
+
+var restore = backup.restore(config, logger, function(err, json) {
+    if (err) {
+        logger.error(err);
+        return;
+    }
+
+    if (json && json.locations && json.locations.result) {
+        json.locations.result.forEach(function(location) {
+
+            LocationsApi.create(location, function(err, data) {
+
+                if (err) {
+                    logger.error(err);
+                    return;
+                }
+
+                logger.info('restore ' + data.method + ' ' + data.url);
+            });
+        });
+
+        logger.info('restore from backup complete');
+    }
+});
+
+
+
+
+// init interval backup
+backup.backup(config, logger);
 
 var port = 8080;
 
@@ -59,20 +92,6 @@ app.all('/fake/*', function(req, res) {
         res.write(location.response);
         res.end();
     });
-
-
-
-
-    //var r = {
-    //    path: req.path,
-    //    query: req.query,
-    //    method: req.method
-    //};
-    //
-    //
-    //
-    //res.write(JSON.stringify(r));
-    //res.end();
 });
 
 app.use(function(req, res) {

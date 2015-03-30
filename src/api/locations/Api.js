@@ -90,6 +90,8 @@ LocationsApi.prototype.create = function(data, callback) {
 
     data.creation_date = moment().toISOString();
 
+    delete data.modification_date;
+
     this.validate(data, function(err, location) {
 
         if (err) {
