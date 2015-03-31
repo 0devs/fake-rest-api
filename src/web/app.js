@@ -20,4 +20,19 @@ $(document).ready(function () {
 
     var p = new Locations.List(config, logger);
     p.$mount('._body');
+
+    var editor = ace.edit($('.ace_editor')[0]);
+
+    var toggleFullscreen = function() {
+        $('.ace_editor').toggleClass('fullscreen');
+        editor.resize();
+        return false;
+    }
+
+    $('a.fullscreen').click(toggleFullscreen);
+    $(document).keyup(function(e) {
+        if (e.keyCode === 27) {
+            toggleFullscreen();
+        }
+    });
 });
