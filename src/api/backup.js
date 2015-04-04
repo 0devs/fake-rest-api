@@ -49,7 +49,15 @@ function backup(config, logger) {
 }
 
 function restore(config, logger, callback) {
-    fs.readFile(config.backup.path + 'backup.json', function(err, data) {
+
+    var path = config.backup.path + 'backup.json';
+
+    if (!fs.existsSync(path)) {
+        loggger.info('no backup');
+        return;
+    }
+
+    fs.readFile(path, function(err, data) {
 
         if (err) {
             logger.error(err);

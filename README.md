@@ -42,3 +42,9 @@ config.json
 fake-rest-api -c ./config.json start
 ```
 
+## cli options
+
+| option              | description                |  
+| ------------------- |:--------------------------:| 
+| -c, --config <path> | path to custom config.json |
+| -p, --port <number> | server tcp port            |   

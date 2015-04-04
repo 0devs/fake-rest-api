@@ -1,4 +1,5 @@
-'use strict';
+#!/usr/bin/env node
+
 var fs = require('fs');
 
 var start = require('./start');
@@ -10,6 +11,7 @@ program.version(packageJson.version);
 
 program.command('start')
     .description('Starting fake REST API service')
+    .option('-p, --port <n>', 'port', null)
     .option('-c, --config <s>', 'config', null)
     .action(function (cmd, options) {
         var config;
@@ -36,6 +38,10 @@ program.command('start')
 
         } else {
             config = {};
+        }
+
+        if (cmd.port) {
+            config.port = cmd.port;
         }
 
         start(config);
