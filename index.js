@@ -1,111 +1,44 @@
 'use strict';
+var fs = require('fs');
 
-var express = require('express');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var morgan = require('morgan');
-var serveStatic  =require('serve-static');
+var start = require('./start');
+var packageJson = require('./package.json');
 
-var logger = require('log4js').getLogger();
-var app = express();
+var program = require('commander');
 
-app.use('/', serveStatic(__dirname + '/public'));
+program.version(packageJson.version);
 
-app.disable('x-powered-by');
+program.command('start')
+    .description('Starting fake REST API service')
+    .option('-c, --config <s>', 'config', null)
+    .action(function (cmd, options) {
+        var config;
 
-app.use(morgan('combined'));
+        var configPath = cmd.config;
 
-var builder = require('./src/api/builder');
-var Projects = require('./src/api/projects');
-var Locations = require('./src/api/locations');
+        if (configPath) {
 
+            configPath = String(configPath);
 
-app.use(cookieParser());
-app.use(bodyParser.json({limit: '1024kb'}));
+            if (!fs.existsSync(configPath)) {
+                console.log('no config file "' + configPath + '"');
+                return;
+            }
 
-var config = require(__dirname + '/config.json');
+            var configText = fs.readFileSync(configPath);
 
-var ProjectsApi = new Projects.Api(config, logger);
-builder('/api/projects', app, logger, ProjectsApi, Projects);
+            try  {
+                config = JSON.parse(configText);
+            } catch (e) {
+                console.log('config must be valid JSON');
+                return;
+            }
 
-var LocationsApi = new Locations.Api(config, logger);
-builder('/api/locations', app, logger, LocationsApi, Locations);
-
-var backup = require('./src/api/backup');
-
-var restore = backup.restore(config, logger, function(err, json) {
-    if (err) {
-        logger.error(err);
-        return;
-    }
-
-    if (json && json.locations && json.locations.result) {
-        json.locations.result.forEach(function(location) {
-
-            LocationsApi.create(location, function(err, data) {
-
-                if (err) {
-                    logger.error(err);
-                    return;
-                }
-
-                logger.info('restore ' + data.method + ' ' + data.url);
-            });
-        });
-
-        logger.info('restore from backup complete');
-    }
-});
-
-// init interval backup
-backup.backup(config, logger);
-
-var port = config.port;
-
-var headers = {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin' : '*',
-    'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE',
-    'Access-Control-Allow-Headers': 'Content-Type, Cache-Control'
-};
-
-app.get('/api/config', function(req, res) {
-    res.writeHead(200, headers);
-    res.write(JSON.stringify(config));
-    res.end();
-});
-
-app.all('/fake/*', function(req, res) {
-
-    var path = req.path.replace(/\/fake/, '');
-
-    if (req.method == 'OPTIONS') {
-        res.writeHead(200, headers);
-        res.write('{"options": true}');
-        res.end();
-        return;
-    }
-
-    LocationsApi.findByMethodAndPath(req.method, path, function(err, location) {
-        if (err) {
-            res.writeHead(515, headers);
-            res.write('{"error":"no_such_fake_location"}');
-            res.end();
-            return;
+        } else {
+            config = {};
         }
 
-        res.writeHead(location.status, headers);
-        res.write(location.response);
-        res.end();
+        start(config);
     });
-});
 
-app.use(function(req, res) {
-    res.writeHead(404, {'Content-Type': 'application/json'});
-    res.write('{"error": "not_found"}');
-    res.end();
-});
-
-app.listen(port);
-
-logger.info('started on port ' + port);
+program.parse(process.argv);

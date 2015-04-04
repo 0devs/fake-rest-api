@@ -3,10 +3,13 @@
   "version": "0.1.0",
   "description": "fake rest api",
   "main": "index.js",
-  "files": ["public", "src", "index.js", "config.json"],
+  "files": ["public", "src", "start.js", "index.js", "config.json"],
   "scripts": {
     "start": "sh start.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "dev_fake_rest": "./index.js"
   },
   "repository": {
     "type": "git",
@@ -43,7 +46,9 @@
     "express": "4.12.2",
     "body-parser": "*",
     "cookie-parser": "*",
-    "serve-static": "*"
+    "serve-static": "*",
+
+    "commander": "2.7.1"
   },
   "devDependencies": {
     "css-loader": "^0.9.1",
