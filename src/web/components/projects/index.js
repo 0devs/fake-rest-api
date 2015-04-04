@@ -2,8 +2,6 @@ module.exports = {
     List: List
 };
 
-var config = require('../../config');
-
 var Project = require('../../services/projects');
 
 var AddForm = require('./form');

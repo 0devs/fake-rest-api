@@ -2,8 +2,6 @@ module.exports = {
     List: List
 };
 
-var config = require('../../config');
-
 var Locations = require('../../services/locations');
 
 var AddForm = require('./form');
@@ -22,7 +20,7 @@ function List(config, logger) {
             return {
                 locations: [],
                 formVisible: false,
-                base: config.fake.base,
+                base: 'http://' + config.host + ':' + config.port + '/fake',
                 type: 'curl',
                 request: '',
                 response: ''
@@ -86,7 +84,9 @@ function List(config, logger) {
                 vm.$parent.$.form.disable();
             },
 
-            doResponse: function (location) {
+            doResponse: function ($event, location) {
+
+                $event.preventDefault();
 
                 var method = location.method.toLowerCase();
 

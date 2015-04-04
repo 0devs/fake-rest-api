@@ -1,0 +1,19 @@
+{
+  "host": "localhost",
+  "port": 8000,
+  "fake": {
+    "base": "/fake"
+  },
+  "api": {
+    "projects": {
+      "base": "/api/projects"
+    },
+    "locations": {
+      "base": "/api/locations"
+    }
+  },
+  "backup": {
+    "path": "./backup/",
+    "interval": 180000
+  }
+}

@@ -13,13 +13,13 @@
         <table class="table table-bordered">
             <tr>
                 <th class="col-md-5">location</th>
-                <th class="col-md-6">usage <a href="#" v-if="type == 'curl'" v-on="click: setHttp()">http</a> <a href="#" v-if="type == 'http'"  v-on="click: setCurl()">curl</a></th>
+                <th class="col-md-6">usage <a href="#" v-if="type == 'curl'" v-on="click: setHttp()">httpie</a> <a href="#" v-if="type == 'http'"  v-on="click: setCurl()">curl</a></th>
                 <th class="col-md-3">actions</th>
             </tr>
 
             <tr v-repeat="locations">
                 <td>
-                    <a href="#{{id}}" v-on="click: doResponse(this)"><strong>{{method}} {{url}}</strong></a>
+                    <a href="#{{id}}" v-on="click: doResponse($event, this)"><strong>{{method}} {{url}}</strong></a>
                 </td>
                 <td style="font-size: 14px;">
                     <div v-if="type == 'curl'">
@@ -42,10 +42,6 @@
     </div>
 </div>
 
-<!-- Button trigger modal -->
-<!--<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#response">-->
-    <!--Launch demo modal-->
-<!--</button>-->
 
 <div class="modal modal-wide" id="response" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">

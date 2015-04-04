@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "fake rest api",
   "main": "index.js",
+  "files": ["public", "src", "index.js", "config.json"],
   "scripts": {
     "start": "sh start.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -49,6 +50,7 @@
     "html-loader": "^0.2.3",
     "json-loader": "^0.5.1",
     "style-loader": "^0.8.3",
-    "webpack": "^1.7.3"
+    "webpack": "^1.7.3",
+    "nodemon": "*"
   }
 }
