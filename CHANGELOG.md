@@ -4,6 +4,9 @@
 
 # changelog
 
+## 2015-04-04
+- start service: dev_fake_rest start
+
 ## 2015-03-30
 - [be] saving locations into JSON-file, backup, restore locations
 - [api, web]  edit locations, only response

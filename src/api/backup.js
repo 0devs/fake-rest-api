@@ -34,16 +34,16 @@ function backup(config, logger) {
                     logger.info('locations backup to ' + config.backup.path + 'backup.json');
                 });
 
-                var backupFile = config.backup.path + moment().toISOString() + '.json';
-
-                fs.writeFile(backupFile, backup, function(err, data) {
-                    if (err) {
-                        logger.error(err);
-                        return;
-                    }
-
-                    logger.info('locations backup to ' + config.backup.path + backupFile);
-                });
+                //var backupFile = config.backup.path + moment().toISOString() + '.json';
+                //
+                //fs.writeFile(backupFile, backup, function(err, data) {
+                //    if (err) {
+                //        logger.error(err);
+                //        return;
+                //    }
+                //
+                //    logger.info('locations backup to ' + config.backup.path + backupFile);
+                //});
             }
         });
 }

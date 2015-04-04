@@ -100,9 +100,9 @@ function LocationForm(values) {
         changeType: function(type, id) {
             this.$set('type', type);
 
-
             if (type == 'create') {
                 this.$set('id', null);
+                this.$set('fields.status.value', 200);
             } else {
                 this.$set('id', id);
             }

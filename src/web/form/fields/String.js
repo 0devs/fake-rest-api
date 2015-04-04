@@ -20,7 +20,7 @@ FieldString.prototype.validate = function () {
 
     return new Promise(function (resolve, reject) {
 
-        if (that.required && _.isEmpty(that.value)) {
+        if (that.required && !that.value) {
             that.errors.push('Required');
             resolve(false);
             return;

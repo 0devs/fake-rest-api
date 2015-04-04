@@ -1,6 +1,6 @@
 {
   "name": "fake-rest-api",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "description": "fake rest api",
   "main": "index.js",
   "files": ["public", "src", "start.js", "index.js", "config.json"],
@@ -9,7 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "dev_fake_rest": "./index.js"
+    "fake-rest-api": "./index.js"
   },
   "repository": {
     "type": "git",

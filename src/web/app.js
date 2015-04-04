@@ -36,7 +36,7 @@ request.get('/api/config')
                 $('.ace_editor').toggleClass('fullscreen');
                 editor.resize();
                 return false;
-            }
+            };
 
             $('a.fullscreen').click(toggleFullscreen);
             $(document).keyup(function(e) {
