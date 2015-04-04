@@ -1,11 +1,13 @@
 # todo
 
 - delete locations
+- location states
+- location response headers
 
 # changelog
 
 ## 2015-04-04
-- start service: dev_fake_rest start
+- start service: fake-rest-api start
 
 ## 2015-03-30
 - [be] saving locations into JSON-file, backup, restore locations
