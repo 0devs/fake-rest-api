@@ -51,6 +51,13 @@ function LocationForm(values) {
             default: 'GET',
             required: true
         },
+        status: {
+            title: 'HTTP status',
+            type: 'Number',
+            view: 'Input',
+            required: true,
+            validate: [{integer: true}]
+        },
         response: {
             title: 'Response',
             type: 'String',
@@ -79,14 +86,14 @@ function LocationForm(values) {
 
     form.addMethods({
         disable: function() {
-            $(this.$el).find('input').attr('disabled', true);
-            $(this.$el).find('select').attr('disabled', true);
+            $(this.$el).find('.disable-on-edit > input').attr('disabled', true);
+            $(this.$el).find('.disable-on-edit > select').attr('disabled', true);
             this.form.editor.getSession().setValue(this.fields.response.value);
         },
 
         enable: function() {
-            $(this.$el).find('input').attr('disabled', false);
-            $(this.$el).find('select').attr('disabled', false);
+            $(this.$el).find('.disable-on-edit > input').attr('disabled', false);
+            $(this.$el).find('.disable-on-edit > select').attr('disabled', false);
             this.form.editor.getSession().setValue(' ');
         },
 
@@ -148,10 +155,17 @@ function LocationForm(values) {
 
                     var validData = this.getValue();
 
+                    var updateFields = ['status', 'response'];
+
                     var body = {
-                        id: this.id,
-                        response: validData.response
+                        id: this.id
                     };
+
+                    updateFields.forEach(function(name) {
+                        if (validData[name]) {
+                            body[name] = validData[name];
+                        }
+                    });
 
                     this.$parent.getLocationsApi().update(body, function(err, data) {
 

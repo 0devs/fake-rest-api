@@ -81,6 +81,7 @@ function List(config, logger) {
                 vm.$parent.$.form.changeType('update', vm.id);
                 vm.$parent.$.form.$set('fields.url.value', vm.url);
                 vm.$parent.$.form.$set('fields.method.value', vm.method);
+                vm.$parent.$.form.$set('fields.status.value', vm.status);
                 vm.$parent.$.form.$set('fields.response.value', vm.response);
                 vm.$parent.$.form.disable();
             },
@@ -99,7 +100,7 @@ function List(config, logger) {
 
                 request[method](url)
                     .end(function (err, res) {
-                        if (err) {
+                        if (err && !res) {
                             console.log(err);
                             return;
                         }

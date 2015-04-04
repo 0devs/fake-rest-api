@@ -88,7 +88,7 @@ app.all('/fake/*', function(req, res) {
             return;
         }
 
-        res.writeHead(200, headers);
+        res.writeHead(location.status, headers);
         res.write(location.response);
         res.end();
     });

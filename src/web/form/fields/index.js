@@ -1,7 +1,8 @@
 module.exports = {
     Abstract: require('./Abstract'),
     String: require('./String'),
-    Boolean: require('./Boolean')
+    Boolean: require('./Boolean'),
+    Number: require('./Number')
 };
 
 

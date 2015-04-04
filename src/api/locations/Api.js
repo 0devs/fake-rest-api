@@ -147,7 +147,7 @@ LocationsApi.prototype.update = function (updateData, callback) {
 
     var data = that._index.id[updateData.id];
 
-    ['response'].forEach(function (name) {
+    ['status', 'response'].forEach(function (name) {
         if (updateData[name]) {
 
             if (name == 'response') {
