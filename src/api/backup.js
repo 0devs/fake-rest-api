@@ -53,7 +53,7 @@ function restore(config, logger, callback) {
     var path = config.backup.path + 'backup.json';
 
     if (!fs.existsSync(path)) {
-        loggger.info('no backup');
+        logger.info('no backup');
         return;
     }
 
