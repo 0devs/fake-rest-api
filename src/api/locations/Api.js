@@ -13,29 +13,11 @@ var _ = require('lodash');
 var schema = require('./schema');
 
 
-function LocationsApi(config, logger) {
+function LocationsApi(config, logger, model) {
     this._config = config;
     this._logger = logger;
-
-    this._id = 0;
-
-    this._locations = [];
-
-    this._index = {
-        id: {},
-
-        // unique name
-        url: [],
-
-        method_url_location: {}
-    }
+    this._model = model;
 }
-
-
-LocationsApi.prototype._generateId = function () {
-    this._id = this._id + 1;
-    return this._id.toString();
-};
 
 LocationsApi.prototype.validate = function (project, callback) {
 
@@ -61,29 +43,43 @@ LocationsApi.prototype.validate = function (project, callback) {
     });
 };
 
-LocationsApi.prototype.findByMethodAndPath = function (method, path, callback) {
-    var key = method + '_' + path;
-
-    if (!this._index.method_url_location[key]) {
-        callback(new ApiError('not_found'));
-        return;
-    }
-
-    callback(null, this._index.method_url_location[key]);
-};
-
 LocationsApi.prototype.get = function (id, callback) {
-    if (!this._index.id[id]) {
-        callback(new ApiError('not_found'));
-        return;
-    }
 
-    callback(null, this._index.id[id]);
+    var location = this._model.get(id, function (err, data) {
+
+        // todo err process
+
+        if (!data) {
+            callback(new ApiError('not_found'));
+            return;
+        }
+
+        callback(null, data);
+    });
 };
 
+LocationsApi.prototype.findByMethodAndPath = function (method, path, callback) {
+    this._model.find({method: method, path: path}, function (err, data) {
 
-LocationsApi.prototype.find = function (id, callback) {
-    callback(null, this._locations);
+        // todo err process
+
+        if (!data) {
+            callback(new ApiError('not_found'));
+            return;
+        }
+
+        callback(null, data);
+    });
+};
+
+LocationsApi.prototype.find = function (params, callback) {
+
+    this._model.find(params, function (err, data) {
+
+        // todo err process
+
+        callback(null, data);
+    });
 };
 
 
@@ -101,30 +97,30 @@ LocationsApi.prototype.create = function (data, callback) {
             return;
         }
 
-        var indexKey = location.method + '_' + location.url;
+        this._model.create(location, function (err, data) {
 
-        if (that._index.url.indexOf(indexKey) > -1) {
-            var e = new ApiError('duplicate_url', [{message: 'url already exists'}]);
-            callback(e);
-            return;
-        }
+            if (err) {
+                var e;
 
-        try {
-            var obj = JSON.parse(location.response);
-            location.response = JSON.stringify(obj, null, '    ');
+                switch (err.message) {
+                    case 'duplicate_url':
+                        e = new ApiError('duplicate_url', [{message: 'url already exists'}]);
+                        break;
 
-        } catch (e) {
-            callback(new ApiError('invalid_data', [{message: 'response must be valid JSON'}]));
-            return;
-        }
+                    case 'invalid_data':
+                        e = new ApiError('invalid_data', [{message: 'response must be valid JSON'}]);
+                        break;
 
-        location.id = that._generateId();
+                    default:
+                        // todo log error
+                        e = new ApiError('server_error');
+                        break;
+                }
 
-        that._locations.push(location);
-
-        that._index.id[location.id] = location;
-        that._index.url.push(indexKey);
-        that._index.method_url_location[indexKey] = location;
+                callback(e);
+                return;
+            }
+        });
 
         callback(null, location);
     });
@@ -140,10 +136,15 @@ LocationsApi.prototype.update = function (updateData, callback) {
         return;
     }
 
-    if (!that._index.id[updateData.id]) {
-        callback(new ApiError('not_found', [{message: 'such location not found'}]));
-        return;
-    }
+    this._model.get(updateData.id, function(err, data) {
+
+        if (!that._index.id[updateData.id]) {
+            callback(new ApiError('not_found', [{message: 'such location not found'}]));
+            return;
+        }
+    });
+
+
 
     var data = that._index.id[updateData.id];
 
