@@ -42,11 +42,11 @@ LocationModel.prototype._generateId = function () {
 LocationModel.prototype.get = function (id, callback) {
 
     if (!this._index.id[id]) {
-        callback(null, data);
+        callback(null, null);
         return;
     }
 
-    callback(null, this._index.id[id]);
+    callback(null, _.cloneDeep(this._index.id[id]));
 };
 
 /**
@@ -92,7 +92,7 @@ LocationModel.prototype.create = function (location, callback) {
 
     var indexKey = location.method + '_' + location.url;
 
-    if (that._index.url.indexOf(indexKey) > -1) {
+    if (this._index.url.indexOf(indexKey) > -1) {
         var e = new Error('duplicate_url');
         callback(e);
         return;
@@ -122,9 +122,22 @@ LocationModel.prototype.create = function (location, callback) {
  * @param callback
  */
 LocationModel.prototype.update = function (data, callback) {
-    delete data.modification_date;
 
+    // todo check id and data
 
+    var that = this;
+
+    var location = _.cloneDeep(data);
+
+    delete location.modification_date;
+
+    location['modification_date'] = moment().toISOString();
+
+    _.each(location, function (value, name) {
+        that._index.id[location.id][name] = value;
+    });
+
+    callback(null, true);
 };
 
 

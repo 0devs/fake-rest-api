@@ -97,7 +97,7 @@ LocationsApi.prototype.create = function (data, callback) {
             return;
         }
 
-        this._model.create(location, function (err, data) {
+        that._model.create(location, function (err, data) {
 
             if (err) {
                 var e;
@@ -136,39 +136,37 @@ LocationsApi.prototype.update = function (updateData, callback) {
         return;
     }
 
-    this._model.get(updateData.id, function(err, data) {
+    this._model.get(updateData.id, function (err, location) {
 
-        if (!that._index.id[updateData.id]) {
+        // todo err process
+
+        if (!location) {
             callback(new ApiError('not_found', [{message: 'such location not found'}]));
             return;
         }
-    });
 
+        ['status', 'response'].forEach(function (name) {
+            if (updateData[name]) {
 
+                if (name == 'response') {
+                    try {
+                        var obj = JSON.parse(updateData[name]);
+                        updateData[name] = JSON.stringify(obj, null, '    ');
 
-    var data = that._index.id[updateData.id];
-
-    ['status', 'response'].forEach(function (name) {
-        if (updateData[name]) {
-
-            if (name == 'response') {
-                try {
-                    var obj = JSON.parse(updateData[name]);
-                    updateData[name] = JSON.stringify(obj, null, '    ');
-
-                } catch (e) {
-                    callback(new ApiError('invalid_data', [{message: 'response must be valid JSON'}]));
-                    return;
+                    } catch (e) {
+                        callback(new ApiError('invalid_data', [{message: 'response must be valid JSON'}]));
+                        return;
+                    }
                 }
+
+                location[name] = updateData[name];
             }
+        });
 
-            data[name] = updateData[name];
-        }
+        that._model.update(location, function (err, result) {
+            callback(null, location);
+        });
     });
-
-    data['modification_date'] = moment().toISOString();
-
-    callback(null, data);
 };
 
 LocationsApi.prototype.schema = function (data, callback) {

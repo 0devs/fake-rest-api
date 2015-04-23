@@ -23,6 +23,7 @@ module.exports = function (config) {
     var Projects = require('./src/api/projects');
     var Locations = require('./src/api/locations');
 
+    var models = require('./src/api/models').memory;
 
     app.use(cookieParser());
     app.use(bodyParser.json({limit: '1024kb'}));
@@ -34,7 +35,7 @@ module.exports = function (config) {
     var ProjectsApi = new Projects.Api(config, logger);
     builder('/api/projects', app, logger, ProjectsApi, Projects);
 
-    var LocationsApi = new Locations.Api(config, logger);
+    var LocationsApi = new Locations.Api(config, logger, new models.locations());
     builder('/api/locations', app, logger, LocationsApi, Locations);
 
     var backup = require('./src/api/backup');
