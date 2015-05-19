@@ -1,6 +1,10 @@
 # fake-rest-api
 
-your fake REST API server 
+your fake REST API server
+
+[![NPM Version][npm-image]][npm-url]
+[![NPM Downloads][downloads-image]][downloads-url]
+
 
 - fake api 
 - fake locations 
@@ -20,6 +24,8 @@ npm install -g fake-rest-api
 ```
 fake-rest-api start
 ```
+
+go http://localhost:8000
 
 # configure
 
@@ -54,3 +60,8 @@ fake-rest-api -c ./config.json start
 | ------------------- |:--------------------------:| 
 | -c, --config <path> | path to custom config.json |
 | -p, --port <number> | server tcp port            |   
+
+[npm-image]: https://img.shields.io/npm/v/fake-rest-api.svg
+[npm-url]: https://npmjs.org/package/fake-rest-api
+[downloads-image]: https://img.shields.io/npm/dm/fake-rest-api.svg
+[downloads-url]: https://npmjs.org/package/fake-rest-api
