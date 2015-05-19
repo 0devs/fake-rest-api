@@ -15,6 +15,12 @@ your fake REST API server
 npm install -g fake-rest-api
 ```
 
+# fast start
+
+```
+fake-rest-api start
+```
+
 # configure
 
 create backup directory

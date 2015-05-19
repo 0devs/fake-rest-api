@@ -3,8 +3,12 @@
 - delete locations
 - location states
 - location response headers
+- location response not json
 
 # changelog
+
+## v0.3.0 - 2015-05-19
+- refactor location model
 
 ## 2015-04-04
 - start service: fake-rest-api start

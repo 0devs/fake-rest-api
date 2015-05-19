@@ -9,11 +9,16 @@ var program = require('commander');
 
 program.version(packageJson.version);
 
+var action = null;
+
 program.command('start')
     .description('Starting fake REST API service')
     .option('-p, --port <n>', 'port', null)
     .option('-c, --config <s>', 'config', null)
     .action(function (cmd, options) {
+
+        action = 'start';
+
         var config;
 
         var configPath = cmd.config;
@@ -48,3 +53,7 @@ program.command('start')
     });
 
 program.parse(process.argv);
+
+if (!action) {
+    program.outputHelp();
+}
