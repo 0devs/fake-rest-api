@@ -1,6 +1,6 @@
 {
   "name": "fake-rest-api",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "fake REST API server",
   "main": "index.js",
   "files": ["public", "src", "start.js", "index.js", "config.json"],
