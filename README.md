@@ -5,14 +5,15 @@ your fake REST API server
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
 
+[![fake-rest-api](https://github.com/devlprs/fake-rest-api/raw/master/img/main.png)](#features)
 
-- fake api 
-- fake locations 
-- fake HTTP status codes 
+# features
+
+- fake api
+- fake locations
+- fake HTTP status codes
 - fake JSON-responses
 
-
- 
 # install
 
 ```
